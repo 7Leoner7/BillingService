@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Grpc.Core;
 using BillingService;
 using System.Linq;
+using System.Text;
 
 namespace BillingService.Services
 {
@@ -32,6 +33,8 @@ namespace BillingService.Services
                 }
             }
 
+            readonly static public char ControlSymbol = '-';
+
             public List<Coin> GetUserCoins() => coins;
 
             public bool TransactionCoins(User dest_user, int amount)
@@ -41,7 +44,7 @@ namespace BillingService.Services
                     if (amount > coins.Count) throw new Exception();
                     var part_of_coins = coins.Take(amount).ToList();
                     coins.RemoveRange(0, amount);
-                    foreach(var coin in part_of_coins) { coin.History += ">" + dest_user.name; }
+                    foreach(var coin in part_of_coins) { coin.History += ControlSymbol + dest_user.name; }
                     dest_user.GiveUserCoins(part_of_coins);
                     return true;
                 }
@@ -97,7 +100,7 @@ namespace BillingService.Services
                     quant_coins = quant_coins < 1 ? 1 : quant_coins;
                     coins -= (int)quant_coins;
                     sumRate -= users[i].rating;
-                    string zeroHist = "@CoinsEmission>"+users[i].name;
+                    string zeroHist = "@CoinsEmission"+User.ControlSymbol+users[i].name;
                     List<Coin> coinList = new List<Coin>();
                     for (int n = 0; n < quant_coins; n++)
                     {
@@ -154,7 +157,7 @@ namespace BillingService.Services
                 var user_coins = user.GetUserCoins();
                 foreach(var coin in user_coins)
                 {
-                    var leng = coin.History.Count((elem) => elem == '>');
+                    var leng = coin.History.Count((elem) => elem == User.ControlSymbol);
                     if (maxL < leng)
                     {
                         maxL = leng;
