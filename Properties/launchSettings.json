@@ -1,0 +1,13 @@
+﻿{
+  "profiles": {
+    "BillingService": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://192.168.1.67:5062;https://192.168.1.67:7096",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
